@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Kafly - Kafka GUI Client
+
+Welcome to Kafly, the sleek Kafka GUI client that makes stream management a breeze. Crafted with performance in mind, Kafly combines the power of Rust and the simplicity of HTML to deliver a superlative user experience.
+
+## Features
+
+- **Real-Time Streaming**: Monitor your Kafka streams in real time with an intuitive interface.
+- **Cluster Management**: Effortlessly manage your Kafka clusters with comprehensive control options.
+- **Performance Optimized**: Enjoy the speed and stability provided by a Rust-based backend.
+- **Cross-Platform**: Compatible with Windows, macOS, and Linux.
+- **Secure**: Advanced security features to keep your streaming data protected.
+- **Customizable UI**: Tailor Kafly's look to fit your preferences with a customizable HTML frontend.
 
 ## Getting Started
 
-First, run the development server:
+To get started with Kafly, follow these simple steps:
+
+### Prerequisites
+
+- Ensure you have Rust installed on your system. [Install Rust](https://www.rust-lang.org/tools/install)
+- Make sure you have a working Kafka cluster to connect to.
+
+### Installation
+
+1. Clone the Kafly repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+   git clone https://github.com/your_github/kafly.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the cloned directory:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+   cd kafly
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Build the project using Cargo:
 
-## Learn More
+```bash
+   cargo build --release
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Once the build is complete, you can run Kafly:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+   ./target/release/kafly
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
+To launch Kafly, simply execute the binary created in the release build. The user interface can be accessed at http://localhost:8080 by default.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Contributions to Kafly are welcome! If you have suggestions for improvements, please open an issue or pull request.
+
+## License
+
+Kafly is released under the MIT License. See the LICENSE file for details.
+
+## Acknowledgements
+
+- Rust Programming Language community
+- Apache Kafka and its contributors
+- [Your contributors' names or usernames]
+
+Thank you for choosing Kafly for your Kafka management needs. Happy streaming!
