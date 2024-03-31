@@ -3,8 +3,11 @@ import { Inter as FontSans } from "next/font/google"
 
 import "./globals.css"
 
+import { sidebarConfig } from "@/config/sidebar"
 import { cn } from "@/lib/utils"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Header } from "@/components/header"
+import SideBar from "@/components/sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
 
 const fontSans = FontSans({
@@ -32,7 +35,16 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          {children}
+          <main className="flex h-full flex-col items-center justify-between">
+            <div className="container flex flex-row items-start gap-4 pt-2">
+              <aside className="fixed top-2 z-30 -ml-2 hidden h-[calc(100vh-5rem)] w-full max-w-40 shrink-0 border-r-2 md:sticky md:block">
+                <ScrollArea className="h-full py-6 pr-6 lg:py-8">
+                  <SideBar items={sidebarConfig} />
+                </ScrollArea>
+              </aside>
+              {children}
+            </div>
+          </main>
         </ThemeProvider>
       </body>
     </html>
