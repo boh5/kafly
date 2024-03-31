@@ -8,6 +8,10 @@ export const sidebarConfig: SidebarItemWithChildren[] = [
         title: "Overview",
         href: "/",
       },
+      {
+        title: "Connections",
+        href: "/connections",
+      },
     ],
   },
   {

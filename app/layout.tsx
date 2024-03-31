@@ -6,6 +6,7 @@ import "./globals.css"
 import { sidebarConfig } from "@/config/sidebar"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Toaster } from "@/components/ui/toaster"
 import { Header } from "@/components/header"
 import SideBar from "@/components/sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -35,16 +36,19 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <main className="flex h-full flex-col items-center justify-between">
+          <main className="flex size-full flex-col items-center justify-between">
             <div className="container flex flex-row items-start gap-4 pt-2">
               <aside className="fixed top-2 z-30 -ml-2 hidden h-[calc(100vh-5rem)] w-full max-w-40 shrink-0 border-r-2 md:sticky md:block">
                 <ScrollArea className="h-full py-6 pr-6 lg:py-8">
                   <SideBar items={sidebarConfig} />
                 </ScrollArea>
               </aside>
-              {children}
+              <div className="flex w-full flex-1 flex-col overflow-hidden">
+                {children}
+              </div>
             </div>
           </main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
