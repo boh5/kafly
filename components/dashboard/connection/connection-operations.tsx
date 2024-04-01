@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { KafkaConnection } from "@/types/kafka"
-import { deleteKafkaConnection } from "@/lib/tauri-store"
+import { deleteKafkaConnection } from "@/lib/tauri-store/kafka-connection"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,10 +27,12 @@ import { Icons } from "@/components/icons"
 
 interface ConnectionOperationsProps {
   connection: KafkaConnection
+  setKafkaConnections: () => void
 }
 
 export function ConnectionOperations({
   connection,
+  setKafkaConnections,
 }: ConnectionOperationsProps) {
   const router = useRouter()
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
@@ -73,7 +75,7 @@ export function ConnectionOperations({
                   setIsDeleteLoading(false)
                   setShowDeleteAlert(false)
                   console.log("refresh")
-                  router.refresh()
+                  setKafkaConnections()
                 })
               }}
               className="bg-red-600 focus:ring-red-600"

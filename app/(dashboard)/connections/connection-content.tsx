@@ -9,10 +9,12 @@ import { EmptyPlaceholder } from "@/components/empty-placeholder"
 
 interface DashboardConnectionsContentProps {
   connections?: KafkaConnection[] | null
+  setKafkaConnections: () => void
 }
 
 export default function DashboardConnectionsContent({
   connections,
+  setKafkaConnections,
 }: DashboardConnectionsContentProps) {
   return (
     <DashboardShell>
@@ -20,13 +22,17 @@ export default function DashboardConnectionsContent({
         heading="Connections"
         text="Create and manage connections."
       >
-        <ConnectionManagementDialog />
+        <ConnectionManagementDialog setKafkaConnections={setKafkaConnections} />
       </DashboardHeading>
       <div>
         {connections?.length ? (
           <div className="divide-y divide-border rounded-md border">
             {connections.map((connection) => (
-              <ConnectionItem key={connection.id} connection={connection} />
+              <ConnectionItem
+                key={connection.id}
+                connection={connection}
+                setKafkaConnections={setKafkaConnections}
+              />
             ))}
           </div>
         ) : (
@@ -38,7 +44,10 @@ export default function DashboardConnectionsContent({
             <EmptyPlaceholder.Description>
               You don&apos;t have any connections yet. Create one.
             </EmptyPlaceholder.Description>
-            <ConnectionManagementDialog variant="outline" />
+            <ConnectionManagementDialog
+              variant="outline"
+              setKafkaConnections={setKafkaConnections}
+            />
           </EmptyPlaceholder>
         )}
       </div>

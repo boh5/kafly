@@ -9,7 +9,3 @@ export interface KafkaConnection {
   servers: KafkaBootstrapServer[]
   readonly: boolean
 }
-
-export interface KafkaSettings {
-  file: string
-}

@@ -12,7 +12,7 @@ import {
   getKafkaConnection,
   setKafkaConnection,
   updateKafkaConnection,
-} from "@/lib/tauri-store"
+} from "@/lib/tauri-store/kafka-connection"
 import { connectionUpdateSchema } from "@/lib/validations/connection"
 import { Button, ButtonProps } from "@/components/ui/button"
 import {
@@ -42,19 +42,20 @@ import { Icons } from "@/components/icons"
 
 interface connectionManagementDialogProps extends ButtonProps {
   connection?: KafkaConnection
+  setKafkaConnections: () => void
 }
 
 export function ConnectionManagementDialog({
   className,
   variant,
   connection,
+  setKafkaConnections,
   ...props
 }: connectionManagementDialogProps) {
   const isUpdate = !!connection
 
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof connectionUpdateSchema>>({
     resolver: zodResolver(connectionUpdateSchema),
@@ -71,17 +72,21 @@ export function ConnectionManagementDialog({
     setIsSaving(true)
 
     if (isUpdate) {
-      updateKafkaConnection(connection.id, values)
+      updateKafkaConnection(connection.id, values).then(() => {
+        setIsSaving(false)
+        setOpen(false)
+        setKafkaConnections()
+      })
+    } else {
+      setKafkaConnection({
+        id: nanoid(),
+        ...values,
+      }).then(() => {
+        setIsSaving(false)
+        setOpen(false)
+        setKafkaConnections()
+      })
     }
-    setKafkaConnection({
-      id: nanoid(),
-      ...values,
-    })
-
-    setIsSaving(false)
-    setOpen(false)
-    console.log("refresh")
-    router.refresh()
   }
 
   return (

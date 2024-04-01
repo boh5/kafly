@@ -5,9 +5,13 @@ import { ConnectionOperations } from "@/components/dashboard/connection/connecti
 
 interface ConnectionItemProps {
   connection: KafkaConnection
+  setKafkaConnections: () => void
 }
 
-export function ConnectionItem({ connection }: ConnectionItemProps) {
+export function ConnectionItem({
+  connection,
+  setKafkaConnections,
+}: ConnectionItemProps) {
   return (
     <div className="flex items-center justify-between p-4">
       <div className="grid gap-1">
@@ -17,8 +21,12 @@ export function ConnectionItem({ connection }: ConnectionItemProps) {
         <ConnectionManagementDialog
           className="size-8"
           connection={connection}
+          setKafkaConnections={setKafkaConnections}
         />
-        <ConnectionOperations connection={connection} />
+        <ConnectionOperations
+          connection={connection}
+          setKafkaConnections={setKafkaConnections}
+        />
       </div>
     </div>
   )

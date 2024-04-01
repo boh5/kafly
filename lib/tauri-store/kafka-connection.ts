@@ -1,9 +1,9 @@
 import { Store } from "tauri-plugin-store-api"
 
 import { KafkaConnection } from "@/types/kafka"
-import { kafkaSetting } from "@/config/kafka"
+import { AppSetting } from "@/config/app-config"
 
-const store = new Store(kafkaSetting.file)
+const store = new Store(AppSetting.connectionStoreFile)
 
 export async function getKafkaConnections(): Promise<KafkaConnection[] | null> {
   return await store.get("connections")
