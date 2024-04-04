@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useEffect, useState } from "react"
+import Link from "next/link"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,11 +14,11 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { invoke } from "@tauri-apps/api/tauri"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Topic } from "@/types/topic"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
@@ -65,7 +65,14 @@ export const columns: ColumnDef<Topic>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <Link
+        href={`/topics/detail?topic_name=${row.getValue("name")}`}
+        className={cn(buttonVariants({ variant: "link" }))}
+      >
+        {row.getValue("name")}
+      </Link>
+    ),
   },
   {
     accessorKey: "partitions_count",
@@ -75,28 +82,18 @@ export const columns: ColumnDef<Topic>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Partitions Count
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
       )
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("partitions_count")}</div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("partitions_count")}</div>,
   },
   {
     accessorKey: "messages_count",
-    header: () => <div className="text-right">Amount</div>,
+    header: "Messages Count",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("messages_count"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
+      return <div>{row.getValue("messages_count")}</div>
     },
   },
   {
@@ -108,9 +105,9 @@ export const columns: ColumnDef<Topic>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="size-8 p-0">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -118,11 +115,11 @@ export const columns: ColumnDef<Topic>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(topic.name)}
             >
-              Copy payment ID
+              Copy name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>DropdownMenuItem 1</DropdownMenuItem>
+            <DropdownMenuItem>DropdownMenuItem 2</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -130,11 +127,7 @@ export const columns: ColumnDef<Topic>[] = [
   },
 ]
 
-export type TopicsTableProps = {
-  topics: Topic[]
-}
-
-export function TopicsTable({ topics }: TopicsTableProps) {
+export function TopicsTable({ data }: { data: Topic[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -143,8 +136,8 @@ export function TopicsTable({ topics }: TopicsTableProps) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable<Topic>({
-    topics,
+  const table = useReactTable({
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -166,7 +159,7 @@ export function TopicsTable({ topics }: TopicsTableProps) {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Filter name..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -176,7 +169,7 @@ export function TopicsTable({ topics }: TopicsTableProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+              Columns <ChevronDown className="ml-2 size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -189,9 +182,7 @@ export function TopicsTable({ topics }: TopicsTableProps) {
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={(value) => column.toggleVisibility(value)}
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>

@@ -3,3 +3,8 @@ export interface Topic {
   partitions_count: number
   messages_count: number
 }
+
+export interface TauriResponse<T> {
+  data: T | null
+  error: string | null
+}

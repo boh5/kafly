@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use rdkafka::config::ClientConfig;
 use rdkafka::consumer::{BaseConsumer, Consumer};
+use rdkafka::error::KafkaError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -10,6 +11,7 @@ pub struct TopicsData {
     pub partitions_count: usize,
     pub messages_count: usize,
 }
+
 
 pub struct KafkaService {
     consumer: BaseConsumer,
@@ -24,8 +26,8 @@ impl KafkaService {
         KafkaService { consumer }
     }
 
-    pub fn get_topics(&mut self) -> Vec<TopicsData> {
-        let metadata = self.consumer.fetch_metadata(None, Duration::from_secs(5)).unwrap();
+    pub fn get_topics(&mut self) -> Result<Vec<TopicsData>, KafkaError> {
+        let metadata = self.consumer.fetch_metadata(None, Duration::from_secs(5))?;
         let mut topics: Vec<TopicsData> = Vec::new();
 
         for topic in metadata.topics() {
@@ -39,8 +41,8 @@ impl KafkaService {
                     Err(e) => println!("Error fetching watermarks for partition {}: {}", partition.id(), e),
                 }
             }
-            topics.push(TopicsData{name: topic.name().to_string(), partitions_count, messages_count});
+            topics.push(TopicsData { name: topic.name().to_string(), partitions_count, messages_count });
         }
-        topics
+        Ok(topics)
     }
 }
